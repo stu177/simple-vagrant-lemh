@@ -9,19 +9,35 @@ WEBROOT='./public_html'
 # Create project folder
 sudo mkdir "/home/vagrant/${PROJECT}"
 
+# Install repos
+sudo add-apt-repository ppa:saiarcot895/myppa
+
+sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0x5a16e7281be7a449
+sudo add-apt-repository "deb http://dl.hhvm.com/ubuntu $(lsb_release -sc) main"
+
+# Update
+sudo apt-get update
+
+# Install apt-fast
+sudo apt-get install -y apt-fast
+
 # Update / upgrade
 sudo apt-get update
-sudo apt-get -y upgrade
+sudo apt-fast -y upgrade
 
-# Apache 2.5 and PHP 5.5
-sudo apt-get install -y apache2
-sudo apt-get install -y php5
+# nginx
+sudo apt-fast install -y nginx
+
+# HHVM
+sudo apt-fast install -y hhvm
+sudo /usr/share/hhvm/install_fastcgi.sh
+sudo service hhvm restart
 
 # MySQL
 sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password $PASSWORD"
 sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $PASSWORD"
-sudo apt-get install -y mysql-server
-sudo apt-get install -y php5-mysql
+sudo apt-fast install -y mysql-server
+sudo apt-fast install -y php5-mysql
 
 # Adminer
 sudo mkdir /usr/share/adminer
@@ -31,27 +47,8 @@ echo "Alias /adminer /usr/share/adminer/adminer.php" | sudo tee /etc/apache2/con
 sudo a2enconf adminer.conf
 sudo service apache2 restart
 
-# Setup hosts file
-VHOST=$(cat <<EOF
-<VirtualHost *:80>
-    DocumentRoot "/home/vagrant/${PROJECT}/${WEBROOT}"
-    <Directory "/home/vagrant/${PROJECT}/${WEBROOT}">
-        AllowOverride All
-        Require all granted
-    </Directory>
-</VirtualHost>
-EOF
-)
-echo "${VHOST}" > /etc/apache2/sites-available/000-default.conf
-
-# Enable mod_rewrite
-sudo a2enmod rewrite
-
-# Restart Apache
-sudo service apache2 restart
-
 # Git
-sudo apt-get install -y git
+sudo apt-fast install -y git
 
 # Composer
 curl -s https://getcomposer.org/installer | php
