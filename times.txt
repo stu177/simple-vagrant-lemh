@@ -1,0 +1,8 @@
+apt-get = 3:36.69
+apt-get = 3:38.46
+apt-get = 2:23.24
+apt-get = 2:57.43
+apt-get = 2:57.55
+
+apt-fast = 2:05.58
+apt-fast = 2:05.28
