@@ -3,15 +3,16 @@
 Core:
 
 * Linux (Ubuntu 14.04.4 LTS)
-* nginx
+* nginx 1.4.6
 * MySQL 5.5
-* HHVM
+* HHVM 3
 
 Other stuff included:
 
-* Adminer (accessible at /adminer)
 * Composer
 * Git
+
+The provision script also uses apt-fast to speed up the setup process.
 
 ## Usage:
 
